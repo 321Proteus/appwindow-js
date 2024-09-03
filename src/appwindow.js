@@ -2,7 +2,7 @@ class AppWindow {
 
     constructor(name, width, height, id) {
 
-        this.height = height;
+        this.height = height + 20; // delete the 20px if you want to include the titlebar in the total length
         this.width = width;
         this.name = name;
         this.id = id;
@@ -41,6 +41,8 @@ class AppWindow {
         windowContent.className = "window-content";
         if (html) windowContent.insertAdjacentElement("beforeend", html);
         windowElement.appendChild(windowContent);
+
+        this.container = windowElement;
 
         document.getElementById("window-container").appendChild(windowElement)
 
