@@ -71,3 +71,19 @@ body {
     z-index: -1;
     background-color: white;
 }
+
+.app {
+    position: fixed;
+    /* max-height: 300px;
+    max-width: 400px; */
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    background-color: #555;
+}
+
+.window-content {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
