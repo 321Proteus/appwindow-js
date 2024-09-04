@@ -54,7 +54,9 @@ class AppWindow {
         this.container = windowElement;
         this.titleBar = titleBar;
 
-        document.getElementById("window-container").appendChild(windowElement)
+        document.getElementById("window-container").appendChild(windowElement);
+        AppWindow.windowStack.set(AppWindow.stackIndex, this);
+        AppWindow.stackIndex++;
 
     }
 
@@ -76,3 +78,6 @@ class AppWindow {
     }
 
 }
+
+AppWindow.stackIndex = 1;
+AppWindow.windowStack = new Map();
