@@ -6,6 +6,8 @@ class AppWindow {
         this.width = width;
         this.name = name;
         this.id = id;
+        this.container = null;
+        this.titleBar = null;
 
     }
 
@@ -43,6 +45,7 @@ class AppWindow {
         windowElement.appendChild(windowContent);
 
         this.container = windowElement;
+        this.titleBar = titleBar;
 
         document.getElementById("window-container").appendChild(windowElement)
 
