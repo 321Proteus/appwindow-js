@@ -1,3 +1,6 @@
+document.getElementById("window-container").onmousemove = handleCursor;
+document.getElementById("window-container").onmouseleave = endCursor;
+
 const buttons = document.getElementsByClassName("btn-menu");
 for (const button of buttons) {
 

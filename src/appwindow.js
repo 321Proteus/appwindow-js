@@ -53,7 +53,8 @@ class AppWindow {
 
     initEvents() {
 
-        this.container.onmousedown = handleMouseDown;
+        this.container.onmousedown = initCursor.bind(this);
+        this.container.onmouseup = endCursor;
 
     }
 
