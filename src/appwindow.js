@@ -36,7 +36,7 @@ class AppWindow {
         const exitButton = document.createElement("img");
         exitButton.classList.add("btn-titlebar", "btn-exit");
         exitButton.src = "../images/exit.png";
-        exitButton.addEventListener("click", (e) => windowElement.style.display = "none");
+        exitButton.onclick = () => this.hide;
         titlebarButtons.appendChild(exitButton);
 
         const windowContent = document.createElement("div");
@@ -49,6 +49,22 @@ class AppWindow {
 
         document.getElementById("window-container").appendChild(windowElement)
 
+    }
+
+    initEvents() {
+
+        this.container.onmousedown = handleMouseDown;
+
+    }
+
+    endEvents() {
+
+    }
+
+    hide() {
+        console.log(this)
+        this.container.style.display = "none";
+        this.endEvents();
     }
 
 }
