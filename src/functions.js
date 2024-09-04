@@ -1,4 +1,5 @@
 let currentlyDragged = null;
+let appRect = null;
 let isDragging = false;
 let startX = 0;
 let startY = 0;
@@ -10,6 +11,7 @@ function initCursor(e) {
     if (e.target.className == "window-title") {
         
         currentlyDragged = this;
+        appRect = this.baseRect;
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
@@ -28,9 +30,8 @@ function handleCursor(e) {
 
     if (currentlyDragged && isDragging) {
 
-        console.log(dx, dy);
-        currentlyDragged.container.style.left = e.clientX - (startX) + "px";
-        currentlyDragged.container.style.top = e.clientY - (startY) + "px";
+        currentlyDragged.container.style.left = e.clientX - (startX - appRect.left) + "px";
+        currentlyDragged.container.style.top = e.clientY - (startY - appRect.top) + "px";
 
     }
 
