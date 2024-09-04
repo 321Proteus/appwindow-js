@@ -42,6 +42,13 @@ function endCursor(e) {
     if (isDragging) console.log("Mouse up");
     else console.log("Mouse out");
 
+    if (currentlyDragged) currentlyDragged.baseRect = {
+        left: removePixels(currentlyDragged.container.style.left),
+        top: removePixels(currentlyDragged.container.style.top),        
+        width: removePixels(currentlyDragged.container.style.width),
+        height: removePixels(currentlyDragged.container.style.height)
+    }
+
     isDragging = false;
     currentlyDragged = null;
 
