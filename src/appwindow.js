@@ -2,10 +2,17 @@ class AppWindow {
 
     constructor(name, width, height, id) {
 
-        this.height = height + 20; // delete the 20px if you want to include the titlebar in the total length
-        this.width = width;
+        this.baseRect = {
+            left: window.innerWidth / 2 - width / 2 + 20, // delete the 20px if you want to include the titlebar in the total length
+            top: window.innerHeight / 2 - height / 2,
+            width: width,
+            height: height
+        };
+        
         this.name = name;
         this.id = id;
+        this.container = null;
+        this.titleBar = null;
 
     }
 
@@ -14,8 +21,10 @@ class AppWindow {
         const windowElement = document.createElement("div");
         windowElement.className = "app";
 
-        windowElement.style.width = this.width + "px";
-        windowElement.style.height = this.height + "px";
+        windowElement.style.left = this.baseRect.left + "px";
+        windowElement.style.top = this.baseRect.top + "px";
+        windowElement.style.width = this.baseRect.width + "px";
+        windowElement.style.height = this.baseRect.height + "px";
 
         const titleBar = document.createElement("div");
         titleBar.className = "title-bar";
@@ -34,7 +43,7 @@ class AppWindow {
         const exitButton = document.createElement("img");
         exitButton.classList.add("btn-titlebar", "btn-exit");
         exitButton.src = "../images/exit.png";
-        exitButton.addEventListener("click", (e) => windowElement.style.display = "none");
+        exitButton.onclick = () => this.hide;
         titlebarButtons.appendChild(exitButton);
 
         const windowContent = document.createElement("div");
@@ -43,9 +52,34 @@ class AppWindow {
         windowElement.appendChild(windowContent);
 
         this.container = windowElement;
+        this.titleBar = titleBar;
 
-        document.getElementById("window-container").appendChild(windowElement)
+        document.getElementById("window-container").appendChild(windowElement);
+        AppWindow.windowStack.push(this);
+        applyQueue();
+        
+        AppWindow.stackIndex++;
 
     }
 
+    initEvents() {
+
+        this.container.onmousedown = initCursor.bind(this);
+        this.container.onmouseup = endCursor;
+
+    }
+
+    endEvents() {
+
+    }
+
+    hide() {
+        console.log(this)
+        this.container.style.display = "none";
+        this.endEvents();
+    }
+
 }
+
+AppWindow.stackIndex = 1;
+AppWindow.windowStack = [];
