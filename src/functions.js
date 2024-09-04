@@ -8,6 +8,9 @@ function initCursor(e) {
 
     console.log("Mouse down");
 
+    updateQueue(this);
+    applyQueue();
+
     if (e.target.className == "window-title") {
         
         currentlyDragged = this;
@@ -51,5 +54,25 @@ function endCursor(e) {
 
     isDragging = false;
     currentlyDragged = null;
+
+}
+
+function updateQueue(element) {
+
+    var oldPosition = AppWindow.windowStack.indexOf(element);
+
+    for (var i = oldPosition; i < AppWindow.windowStack.length - 1; i++) {
+        AppWindow.windowStack[i] = AppWindow.windowStack[i+1];
+    }        
+
+    AppWindow.windowStack[AppWindow.windowStack.length - 1] = element;
+
+}
+
+function applyQueue() {
+    
+    for (var i=0;i<AppWindow.windowStack.length;i++) {
+        AppWindow.windowStack[i].container.style.zIndex = i + 1;
+    }
 
 }
