@@ -6,7 +6,8 @@ class AppWindow {
             left: window.innerWidth / 2 - width / 2 + 20, // delete the 20px if you want to include the titlebar in the total length
             top: window.innerHeight / 2 - height / 2,
             width: width,
-            height: height
+            height: height,
+            isFullscreen: false
         };
         
         this.name = name;
@@ -38,12 +39,13 @@ class AppWindow {
         const fullscreenButton = document.createElement("img");
         fullscreenButton.classList.add("btn-titlebar", "btn-full");
         fullscreenButton.src = "../images/fullscreen.png";
+        fullscreenButton.onclick = () => this.toggleFullscreen();
         titlebarButtons.appendChild(fullscreenButton);
 
         const exitButton = document.createElement("img");
         exitButton.classList.add("btn-titlebar", "btn-exit");
         exitButton.src = "../images/exit.png";
-        exitButton.onclick = () => this.hide;
+        exitButton.onclick = () => this.hide();
         titlebarButtons.appendChild(exitButton);
 
         const windowContent = document.createElement("div");
@@ -78,6 +80,30 @@ class AppWindow {
         this.container.style.display = "none";
         this.endEvents();
     }
+
+    toggleFullscreen() {
+        
+        if (!this.baseRect.isFullScreen) {
+
+            var windowContainer = document.getElementById("window-container");
+            this.container.style.left = "0px";
+            this.container.style.top = window.getComputedStyle(windowContainer)["top"];
+            this.container.style.width = windowContainer.clientWidth + "px";
+            this.container.style.height = windowContainer.clientHeight + "px";
+
+        } else {
+
+            this.container.style.left = this.baseRect.left + "px";
+            this.container.style.top = this.baseRect.top + "px";
+            this.container.style.width = this.baseRect.width + "px";
+            this.container.style.height = this.baseRect.height + "px";
+
+        }
+
+        this.baseRect.isFullScreen = !this.baseRect.isFullScreen;
+
+    }
+
 
 }
 
