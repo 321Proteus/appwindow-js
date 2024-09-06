@@ -48,10 +48,13 @@ class AppWindow {
         exitButton.onclick = () => this.hide();
         titlebarButtons.appendChild(exitButton);
 
-        const windowContent = document.createElement("div");
+        const windowContent = document.createElement("iframe");
         windowContent.className = "window-content";
-        if (html) windowContent.insertAdjacentElement("beforeend", html);
         windowElement.appendChild(windowContent);
+
+        windowContent.onload = () => {
+            windowContent.contentDocument.body.style.margin = "0px";
+        }
 
         this.container = windowElement;
         this.titleBar = titleBar;
@@ -64,6 +67,27 @@ class AppWindow {
 
     }
 
+    loadAsHTML(html) {
+
+        const iframe = this.container.lastChild;
+        iframe.contentDocument.body.insertAdjacentHTML("beforeend", html);
+
+    }
+
+    loadAsFile(path) {
+
+        const iframe = this.container.lastChild;
+        iframe.src = path;
+
+    }
+
+    loadAsRemoteFile(path) {
+
+        const iframe = this.container.lastChild;
+        iframe.src = path;
+
+    }
+
     initEvents() {
 
         this.container.onmousedown = initCursor.bind(this);
@@ -72,6 +96,9 @@ class AppWindow {
     }
 
     endEvents() {
+
+        this.container.onmousedown = null;
+        this.container.onmouseup = null;
 
     }
 

@@ -11,7 +11,11 @@ for (const button of buttons) {
         const content = document.createElement("div");
         content.textContent = button.innerHTML;
 
-        app.create(content);
+        app.create();
+
+        const html = `<div style="width:100%;
+        height:100%;">test</div>`
+        app.loadAsHTML(html)
         app.initEvents();
 
     }
