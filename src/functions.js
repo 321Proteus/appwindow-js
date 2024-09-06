@@ -1,40 +1,104 @@
 let currentlyDragged = null;
 let appRect = null;
 let isDragging = false;
+let isFrame = false;
+
 let startX = 0;
 let startY = 0;
 
+let isBorder = false;
+let isResize = false;
+let resizeLeft = 0;
+let resizeTop = 0;
+let borderLeft = 0;
+let borderTop = 0;
+
 function initCursor(e) {
 
-    console.log("Mouse down");
+    // console.log("Mouse down");
+    // console.log(e.target);
+
+    currentlyDragged = this;
+
+    startX = e.clientX;
+    startY = e.clientY;
+
+    appRect = this.baseRect;
 
     updateQueue(this);
     applyQueue();
 
     if (e.target.className == "window-title") {
-        
-        currentlyDragged = this;
-        appRect = this.baseRect;
+
+        console.log("button pressed in title bar");
         isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
+        return;
 
-    } else if (e.target.className == "window-content") {
+    }
 
-        currentlyDragged = this;
-        startX = e.clientX;
-        startY = e.clientY;
+    if (!borderLeft && !borderTop) {
 
-    } else return;
+        console.log("button pressed in iFrame");
+
+    } else {
+        console.log(e.target)
+        console.log("button pressed on border");
+
+        startX += appRect.left;
+        startY += appRect.top + 20;
+        isFrame = true;
+
+        setResizeDirection();
+
+    } 
+
 
 }
 
-function handleCursor(e) {
+function handleCursor(pos) {
 
-    if (currentlyDragged && isDragging) {
+    if (currentlyDragged) {
 
-        currentlyDragged.container.style.left = e.clientX - (startX - appRect.left) + "px";
-        currentlyDragged.container.style.top = e.clientY - (startY - appRect.top) + "px";
+        var dx = 0, dy = 0;
+
+        // console.log(pos.clientX + dx, pos.clientY + dy, isFrame);
+
+        if (isResize) {
+                
+            var resizeX = (pos.clientX + dx - startX) * resizeLeft;
+            var resizeY = (pos.clientY + dy - startY) * resizeTop;
+
+            // console.log(resizeX, resizeY)
+
+            if (resizeLeft === 1) {
+                currentlyDragged.container.style.left = appRect.left + resizeX + "px";
+                currentlyDragged.container.style.width = appRect.width - resizeX + "px";
+            } else if (resizeLeft === -1) {
+                currentlyDragged.container.style.width = appRect.width - resizeX + "px";
+            }
+
+            if (resizeTop === 1) {
+                currentlyDragged.container.style.top = appRect.top + resizeY + "px";
+                currentlyDragged.container.style.height = appRect.height - resizeY + "px";
+            } else if (resizeTop === -1) {
+                currentlyDragged.container.style.height = appRect.height - resizeY + "px";
+            }
+                
+            // if (isFrame) {
+            //     dx += appRect.left;
+            //     dy += appRect.top + 20;
+
+            //     console.log("add dx and dy");
+            // }
+
+        }
+
+        else if (isDragging) {
+
+            currentlyDragged.container.style.left = pos.clientX - (startX - appRect.left) + "px";
+            currentlyDragged.container.style.top = pos.clientY - (startY - appRect.top) + "px";
+
+        } 
 
     }
 
@@ -92,7 +156,7 @@ function setResizeDirection() {
     resizeTop = borderTop;
     isResize = isBorder;
 
-    console.log(resizeLeft, resizeTop);
+    // console.log(resizeLeft, resizeTop);
 
 }
 

@@ -54,6 +54,7 @@ class AppWindow {
 
         windowContent.onload = () => {
             windowContent.contentDocument.body.style.margin = "0px";
+            windowContent.contentDocument.body.style.userSelect = "none";
         }
 
         this.container = windowElement;
@@ -98,10 +99,12 @@ class AppWindow {
         }
         
         var frame = this.container.lastChild;
-        frame.contentDocument.onmousemove = e => {
+        frame.contentDocument.body.onmousedown = initCursor.bind(this);
+        frame.contentDocument.body.onmousemove = e => {
             checkResize.bind(frame.contentDocument.body)(e);
             setCursorStyle.bind(frame.contentDocument.body)();
         }
+        frame.contentDocument.body.onmouseup = endCursor;
 
     }
 
