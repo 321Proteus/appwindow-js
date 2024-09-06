@@ -76,3 +76,66 @@ function applyQueue() {
     }
 
 }
+
+function setCursorStyle() {
+
+    var firstLetter = (borderTop == 1) ? 'n' : (borderTop) ? 's' : '';
+    var secondLetter = (borderLeft == 1) ? 'w' : (borderLeft) ? 'e' : '';
+    var string = (firstLetter || secondLetter) ? firstLetter + secondLetter + "-resize" : "auto";
+    this.style.cursor = string;
+
+}
+
+function setResizeDirection() {
+
+    resizeLeft = borderLeft;
+    resizeTop = borderTop;
+    isResize = isBorder;
+
+    console.log(resizeLeft, resizeTop);
+
+}
+
+function checkResize(e) {
+
+    var borders = this.getBoundingClientRect();
+
+    var left = e.clientX - borders.left;
+    var top = e.clientY - borders.top;
+
+    var elementWidth = (this.style.width) ? this.style.width : window.getComputedStyle(this).width;
+    var elementHeight = (this.style.height) ? this.style.height : window.getComputedStyle(this).height;
+
+    elementWidth = elementWidth.slice(0, elementWidth.indexOf("p"));
+    elementHeight = elementHeight.slice(0, elementHeight.indexOf("p"));
+
+    var lewo = left < 5;
+    var prawo = elementWidth - left < 5;
+    var gora = top < 5;
+    var dol = elementHeight - top < 5;
+
+    isBorder = true;
+
+    if (!currentlyDragged) {
+        if (prawo) {
+            borderLeft = -1;
+            borderTop = gora ? 1 : dol ? -1 : 0;
+        } else if (lewo) {
+            borderLeft = 1;
+            borderTop = gora ? 1 : dol ? -1 : 0;
+        } else if (gora) {
+            borderLeft = 0;
+            borderTop = 1;
+        } else if (dol) {
+            borderLeft = 0;
+            borderTop = -1;
+        } else {
+            borderLeft = 0;
+            borderTop = 0;
+            isBorder = false;
+        }        
+    }
+
+    // console.log(borderLeft, borderTop, isBorder)
+
+}

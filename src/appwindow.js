@@ -92,6 +92,16 @@ class AppWindow {
 
         this.container.onmousedown = initCursor.bind(this);
         this.container.onmouseup = endCursor;
+        this.container.onmousemove = e => {
+            checkResize.bind(this.container)(e);
+            setCursorStyle.bind(this.container)();
+        }
+        
+        var frame = this.container.lastChild;
+        frame.contentDocument.onmousemove = e => {
+            checkResize.bind(frame.contentDocument.body)(e);
+            setCursorStyle.bind(frame.contentDocument.body)();
+        }
 
     }
 
