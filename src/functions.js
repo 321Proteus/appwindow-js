@@ -1,7 +1,9 @@
 let currentlyDragged = null;
 let appRect = null;
 let isDragging = false;
-let isFrame = false;
+let isContainer = false;
+
+let caller = null, previousCaller;
 
 let startX = 0;
 let startY = 0;
@@ -36,17 +38,19 @@ function initCursor(e) {
 
     }
 
+    checkResize.bind(e.target);
+
+
     if (!borderLeft && !borderTop) {
 
         console.log("button pressed in iFrame");
 
     } else {
-        console.log(e.target)
+
         console.log("button pressed on border");
 
         startX += appRect.left;
         startY += appRect.top + 20;
-        isFrame = true;
 
         setResizeDirection();
 
@@ -55,20 +59,45 @@ function initCursor(e) {
 
 }
 
+function handleEnter() {
+
+    isContainer = false;
+    console.log("Button moved to window");
+
+}
+
+function handleLeave() {
+
+    if (!currentlyDragged) {
+        isContainer = true;
+        console.log("Button moved to container");
+    }
+
+}
+
 function handleCursor(pos) {
 
     if (currentlyDragged) {
 
+        caller = pos.target;
+        if (previousCaller !== caller) {
+            console.log(previousCaller, caller);
+            previousCaller = caller;
+        }
+
         var dx = 0, dy = 0;
 
-        // console.log(pos.clientX + dx, pos.clientY + dy, isFrame);
+        if (!isContainer) {
+            dx += appRect.left;
+            dy += appRect.top + 20;
+        }
 
         if (isResize) {
                 
             var resizeX = (pos.clientX + dx - startX) * resizeLeft;
             var resizeY = (pos.clientY + dy - startY) * resizeTop;
 
-            // console.log(resizeX, resizeY)
+            console.log(pos.clientX, pos.clientY, resizeX, resizeY);
 
             if (resizeLeft === 1) {
                 currentlyDragged.container.style.left = appRect.left + resizeX + "px";
@@ -84,12 +113,6 @@ function handleCursor(pos) {
                 currentlyDragged.container.style.height = appRect.height - resizeY + "px";
             }
                 
-            // if (isFrame) {
-            //     dx += appRect.left;
-            //     dy += appRect.top + 20;
-
-            //     console.log("add dx and dy");
-            // }
 
         }
 

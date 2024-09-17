@@ -1,5 +1,8 @@
-document.getElementById("window-container").onmousemove = handleCursor;
-document.getElementById("window-container").onmouseleave = endCursor;
+const windowContainer = document.getElementById("window-container");
+// windowContainer.onmousemove = handleCursor;
+windowContainer.onmouseleave = endCursor;
+windowContainer.onmouseenter = handleEnter
+windowContainer.onmouse
 
 const buttons = document.getElementsByClassName("btn-menu");
 for (const button of buttons) {
@@ -13,8 +16,7 @@ for (const button of buttons) {
 
         app.create();
 
-        const html = `<div style="width:100%;
-        height:100%;">test</div>`
+        const html = `<div style="width:100%;height:100%;">test</div>`
         app.loadAsHTML(html)
         app.initEvents();
 
