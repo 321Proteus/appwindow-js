@@ -47,10 +47,9 @@ function initCursor(e) {
 
     } else {
 
-        console.log("button pressed on border");
+        console.log("button pressed on border at", startX, startY, "so actual start is ", startX + appRect.left, startY + appRect.top + 20);
 
-        startX += appRect.left;
-        startY += appRect.top + 20;
+       if (e.target.className != "app") isContainer = false;
 
         setResizeDirection();
 
@@ -94,10 +93,10 @@ function handleCursor(pos) {
 
         if (isResize) {
                 
-            var resizeX = (pos.clientX + dx - startX) * resizeLeft;
-            var resizeY = (pos.clientY + dy - startY) * resizeTop;
+            var resizeX = (pos.clientX - dx - startX) * resizeLeft;
+            var resizeY = (pos.clientY - dy - startY) * resizeTop;
 
-            console.log(pos.clientX, pos.clientY, resizeX, resizeY);
+            console.log(pos.clientX, pos.clientY, resizeX, resizeY, caller);
 
             if (resizeLeft === 1) {
                 currentlyDragged.container.style.left = appRect.left + resizeX + "px";

@@ -1,5 +1,5 @@
 const windowContainer = document.getElementById("window-container");
-// windowContainer.onmousemove = handleCursor;
+windowContainer.onmousemove = handleCursor;
 windowContainer.onmouseleave = endCursor;
 windowContainer.onmouseenter = handleEnter
 windowContainer.onmouse
