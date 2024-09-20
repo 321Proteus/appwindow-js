@@ -17,8 +17,7 @@ let borderTop = 0;
 
 function initCursor(e) {
 
-    // console.log("Mouse down");
-    // console.log(e.target);
+   // console.log(e.target);
 
     currentlyDragged = this;
 
@@ -46,10 +45,12 @@ function initCursor(e) {
         console.log("button pressed in iFrame");
 
     } else {
+        var c = e.target.className != "app" && e.target.className != "window-content";
+        console.log("button pressed on border at", startX, startY, "so actual start is ", startX + (c ? appRect.left : 0), startY + (c ? appRect.top + 20 : 0));
+       // console.log(e.target.className, e.target.id);
 
-        console.log("button pressed on border at", startX, startY, "so actual start is ", startX + appRect.left, startY + appRect.top + 20);
-
-       if (e.target.className != "app") isContainer = false;
+       if (c) isContainer = false;
+       else isContainer = true;
 
         setResizeDirection();
 
@@ -58,31 +59,25 @@ function initCursor(e) {
 
 }
 
-function handleEnter() {
+function handleEnter(e) {
 
-    isContainer = false;
-    console.log("Button moved to window");
+    isContainer = true;
+    console.log("Button moved to window at ", e);
 
 }
 
-function handleLeave() {
+function handleLeave(e) {
 
-    if (!currentlyDragged) {
-        isContainer = true;
-        console.log("Button moved to container");
-    }
+    //if (!currentlyDragged) {
+    isContainer = false;
+         console.log("Button moved to container at ", e);
+    //}
 
 }
 
 function handleCursor(pos) {
 
     if (currentlyDragged) {
-
-        caller = pos.target;
-        if (previousCaller !== caller) {
-            console.log(previousCaller, caller);
-            previousCaller = caller;
-        }
 
         var dx = 0, dy = 0;
 
@@ -92,11 +87,11 @@ function handleCursor(pos) {
         }
 
         if (isResize) {
-                
+            
             var resizeX = (pos.clientX - dx - startX) * resizeLeft;
             var resizeY = (pos.clientY - dy - startY) * resizeTop;
 
-            console.log(pos.clientX, pos.clientY, resizeX, resizeY, caller);
+            console.log(resizeX, resizeY, pos.target);
 
             if (resizeLeft === 1) {
                 currentlyDragged.container.style.left = appRect.left + resizeX + "px";
@@ -128,8 +123,7 @@ function handleCursor(pos) {
 
 function endCursor(e) {
     
-    if (isDragging) console.log("Mouse up");
-    else console.log("Mouse out");
+    console.log((isDragging || isResize) ? "Mouse up" : "Mouse out");
 
     if (currentlyDragged) currentlyDragged.baseRect = {
         left: removePixels(currentlyDragged.container.style.left),
@@ -139,6 +133,7 @@ function endCursor(e) {
     }
 
     isDragging = false;
+    isResize = false;
     currentlyDragged = null;
 
 }
