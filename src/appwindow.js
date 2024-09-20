@@ -91,27 +91,23 @@ class AppWindow {
 
     initEvents() {
 
-        this.container.onmousedown = initCursor.bind(this);
-        this.container.onmouseup = endCursor;
-        this.container.onmousemove = e => {
+        this.container.onpointerdown = initCursor.bind(this);
+        this.container.onpointerup = endCursor;
+        this.container.onpointermove = e => {
+            isFrame = false;
             checkResize.bind(this.container)(e);
             setCursorStyle.bind(this.container)();
         }
 
         
         var frame = this.container.lastChild;
-        
-        frame.contentDocument.body.onmousedown = initCursor.bind(this);
 
-        frame.contentDocument.body.onmouseenter = e => handleEnter(e);
-        frame.contentDocument.body.onmouseleave = e => handleLeave(e);
+        frame.contentDocument.body.addEventListener("pointermove", e => {
+            isFrame = true;
+            checkResize.bind(this.container)(e);
+            setCursorStyle.bind(this.container)(e);
+        })
 
-        frame.contentDocument.body.onmousemove = e => {
-            handleCursor(e);
-            checkResize.bind(frame.contentDocument.body)(e);
-            setCursorStyle.bind(frame.contentDocument.body)();
-        }
-        frame.contentDocument.body.onmouseup = e => endCursor();
 
     }
 

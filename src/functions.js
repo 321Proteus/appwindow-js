@@ -2,6 +2,7 @@ let currentlyDragged = null;
 let appRect = null;
 let isDragging = false;
 let isContainer = false;
+let isFrame = false;
 
 let caller = null, previousCaller;
 
@@ -17,7 +18,8 @@ let borderTop = 0;
 
 function initCursor(e) {
 
-   // console.log(e.target);
+    console.log(e.target);
+    e.target.setPointerCapture(e.pointerId);
 
     currentlyDragged = this;
 
@@ -61,17 +63,13 @@ function initCursor(e) {
 
 function handleEnter(e) {
 
-    isContainer = true;
     console.log("Button moved to window at ", e);
 
 }
 
 function handleLeave(e) {
 
-    //if (!currentlyDragged) {
-    isContainer = false;
          console.log("Button moved to container at ", e);
-    //}
 
 }
 
@@ -90,8 +88,6 @@ function handleCursor(pos) {
             
             var resizeX = (pos.clientX - dx - startX) * resizeLeft;
             var resizeY = (pos.clientY - dy - startY) * resizeTop;
-
-            console.log(resizeX, resizeY, pos.target);
 
             if (resizeLeft === 1) {
                 currentlyDragged.container.style.left = appRect.left + resizeX + "px";
@@ -217,6 +213,6 @@ function checkResize(e) {
         }        
     }
 
-    // console.log(borderLeft, borderTop, isBorder)
+   // console.log(borderLeft, borderTop, isBorder)
 
 }
