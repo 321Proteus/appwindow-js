@@ -104,8 +104,8 @@ class AppWindow {
 
         frame.contentDocument.body.addEventListener("pointermove", e => {
             isFrame = true;
-            checkResize.bind(this.container)(e);
-            setCursorStyle.bind(this.container)(e);
+            checkResize.bind(this.container)(e, frame);
+            setCursorStyle.bind(this.container)(frame);
         })
 
 

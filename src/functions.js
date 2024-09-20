@@ -154,12 +154,13 @@ function applyQueue() {
 
 }
 
-function setCursorStyle() {
+function setCursorStyle(frame) {
 
     var firstLetter = (borderTop == 1) ? 'n' : (borderTop) ? 's' : '';
     var secondLetter = (borderLeft == 1) ? 'w' : (borderLeft) ? 'e' : '';
     var string = (firstLetter || secondLetter) ? firstLetter + secondLetter + "-resize" : "auto";
     this.style.cursor = string;
+    if (frame) frame.contentDocument.body.style.cursor = string;
 
 }
 
@@ -173,18 +174,31 @@ function setResizeDirection() {
 
 }
 
-function checkResize(e) {
+function checkResize(e, frameElement) {
 
-    var borders = this.getBoundingClientRect();
+    var elementWidth, elementHeight;
+    var left, top;
 
-    var left = e.clientX - borders.left;
-    var top = e.clientY - borders.top;
+    if (isFrame) {
 
-    var elementWidth = (this.style.width) ? this.style.width : window.getComputedStyle(this).width;
-    var elementHeight = (this.style.height) ? this.style.height : window.getComputedStyle(this).height;
+        left = e.clientX;
+        top = e.clientY;
+        elementWidth = window.getComputedStyle(frameElement).width;
+        elementHeight = window.getComputedStyle(frameElement).height;
+
+    } else {
+
+        var borders = this.getBoundingClientRect();
+        left = e.clientX - borders.left;
+        top = e.clientY - borders.top;        
+        var elementWidth = this.style.width;
+        var elementHeight = this.style.height;
+
+    }
 
     elementWidth = elementWidth.slice(0, elementWidth.indexOf("p"));
     elementHeight = elementHeight.slice(0, elementHeight.indexOf("p"));
+
 
     var lewo = left < 5;
     var prawo = elementWidth - left < 5;
@@ -213,6 +227,6 @@ function checkResize(e) {
         }        
     }
 
-   // console.log(borderLeft, borderTop, isBorder)
+   console.log(borderLeft, borderTop, left, top);
 
 }
