@@ -1,7 +1,6 @@
 const windowContainer = document.getElementById("window-container");
 windowContainer.onpointermove = handleCursor;
 windowContainer.onpointerleave = endCursor;
-windowContainer.onpointerup = endCursor;
 
 const buttons = document.getElementsByClassName("btn-menu");
 for (const button of buttons) {
