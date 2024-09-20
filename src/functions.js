@@ -49,27 +49,14 @@ function initCursor(e) {
     } else {
         var c = e.target.className != "app" && e.target.className != "window-content";
         console.log("button pressed on border at", startX, startY, "so actual start is ", startX + (c ? appRect.left : 0), startY + (c ? appRect.top + 20 : 0));
-       // console.log(e.target.className, e.target.id);
 
-       if (c) isContainer = false;
-       else isContainer = true;
+        if (c) isContainer = false;
+        else isContainer = true;
 
         setResizeDirection();
 
     } 
 
-
-}
-
-function handleEnter(e) {
-
-    console.log("Button moved to window at ", e);
-
-}
-
-function handleLeave(e) {
-
-         console.log("Button moved to container at ", e);
 
 }
 
@@ -170,8 +157,6 @@ function setResizeDirection() {
     resizeTop = borderTop;
     isResize = isBorder;
 
-    // console.log(resizeLeft, resizeTop);
-
 }
 
 function checkResize(e, frameElement) {
@@ -226,7 +211,5 @@ function checkResize(e, frameElement) {
             isBorder = false;
         }        
     }
-
-   console.log(borderLeft, borderTop, left, top);
 
 }
