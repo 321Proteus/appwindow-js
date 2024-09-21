@@ -185,6 +185,8 @@ function checkResize(e, frameElement) {
     var elementWidth, elementHeight;
     var left, top;
 
+    const margin = 5;
+
     if (isFrame) {
 
         left = e.clientX;
@@ -202,10 +204,10 @@ function checkResize(e, frameElement) {
 
     }
 
-    var lewo = left < 5;
-    var prawo = elementWidth - left < 5;
-    var gora = top < 5;
-    var dol = elementHeight - top < 5;
+    var lewo = left < margin;
+    var prawo = elementWidth - left < margin;
+    var gora = top < margin;
+    var dol = elementHeight - top < margin;
 
     isBorder = true;
 
