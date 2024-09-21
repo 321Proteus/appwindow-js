@@ -15,6 +15,28 @@ let resizeTop = 0;
 let borderLeft = 0;
 let borderTop = 0;
 
+function setPointerDownEvent(event, target) {
+    pointerHolder = target ? target : event.target;
+    pointerHolder.setPointerCapture(event.pointerId);            
+    initCursor.bind(this)(event);
+}
+
+function setPointerMoveEvent(event, target) {
+    var frameDoc = target ? target.contentDocument : undefined;
+    checkResize.bind(this.container)(event, target);
+    setCursorStyle.bind(this.container)(frameDoc);
+}
+
+function setPointerEnterEvent() {
+    console.log("Cursor entered window")
+    isFrame = true;
+}
+
+function setPointerLeaveEvent() {
+    console.log("Cursor left window");
+    isFrame = false;
+}
+
 function initCursor(e) {
 
     currentlyDragged = this;
@@ -146,7 +168,7 @@ function setCursorStyle(frame) {
     var secondLetter = (borderLeft == 1) ? 'w' : (borderLeft) ? 'e' : '';
     var string = (firstLetter || secondLetter) ? firstLetter + secondLetter + "-resize" : "auto";
     this.style.cursor = string;
-    if (frame) frame.contentDocument.body.style.cursor = string;
+    if (frame) frame.body.style.cursor = string;
 
 }
 
@@ -179,7 +201,6 @@ function checkResize(e, frameElement) {
         var elementHeight = parseFloat(this.style.height);
 
     }
-
 
     var lewo = left < 5;
     var prawo = elementWidth - left < 5;

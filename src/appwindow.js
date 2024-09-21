@@ -91,35 +91,22 @@ class AppWindow {
 
     initEvents() {
 
-        this.container.addEventListener("pointerdown", e => {
-        
-            pointerHolder = e.target;
-            pointerHolder.setPointerCapture(e.pointerId);            
-            initCursor.bind(this)(e);
-        })
-
-        this.container.onpointermove = e => {
-            checkResize.bind(this.container)(e);
-            setCursorStyle.bind(this.container)();
-        }
-
+        this.container.addEventListener("pointerdown", setPointerDownEvent.bind(this));
+        this.container.addEventListener("pointermove", setPointerMoveEvent.bind(this));
         this.container.onpointerup = endCursor;
 
         const frame = this.container.lastElementChild;
         const frameContent = frame.contentDocument;
 
-        frame.addEventListener("pointerdown", e => {
-            pointerHolder = e.target;
-            pointerHolder.setPointerCapture(e.pointerId);
-            initCursor.bind(this)(e);
-        })
-
-        frame.onpointermove = e => {
-            checkResize.bind(this.container)(e);
-            setCursorStyle.bind(this.container)();
-        }
-
+        frame.addEventListener("pointerdown", setPointerDownEvent.bind(this));
+        frame.addEventListener("pointermove", setPointerMoveEvent.bind(this));
         frame.onpointerup = endCursor;
+
+        frameContent.addEventListener("pointerenter", setPointerEnterEvent);
+        frameContent.addEventListener("pointerleave", setPointerLeaveEvent);
+        frameContent.addEventListener("pointerdown", e => setPointerDownEvent.bind(this)(e, frame));
+        frameContent.addEventListener("pointermove", e => setPointerMoveEvent.bind(this)(e, frame));
+        frameContent.onpointerup = endCursor;
 
     }
 
