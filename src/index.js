@@ -14,7 +14,9 @@ for (const button of buttons) {
 
         app.create();
 
-        const html = `<div style="width:100%;height:100%;">test</div>`
+        const html = `<div style="width:100%;height:100%;">
+                        <button id="button" onclick=console.log("Button pressed")>Test
+                    </div>`
         app.loadAsHTML(html)
         app.initEvents();
 

@@ -1,10 +1,9 @@
 let currentlyDragged = null;
 let appRect = null;
 let isDragging = false;
-let isContainer = false;
 let isFrame = false;
 
-let caller = null, previousCaller;
+let pointerHolder = null;
 
 let startX = 0;
 let startY = 0;
@@ -17,9 +16,6 @@ let borderLeft = 0;
 let borderTop = 0;
 
 function initCursor(e) {
-
-    console.log(e.target);
-    e.target.setPointerCapture(e.pointerId);
 
     currentlyDragged = this;
 
@@ -39,7 +35,7 @@ function initCursor(e) {
 
     }
 
-    checkResize.bind(e.target);
+    checkResize.bind(e.target)(e);
 
 
     if (!borderLeft && !borderTop) {
@@ -48,10 +44,13 @@ function initCursor(e) {
 
     } else {
         var c = e.target.className != "app" && e.target.className != "window-content";
-        console.log("button pressed on border at", startX, startY, "so actual start is ", startX + (c ? appRect.left : 0), startY + (c ? appRect.top + 20 : 0));
 
-        if (c) isContainer = false;
-        else isContainer = true;
+        console.log(
+            "button pressed on border at", startX, startY,
+            "so actual start is ", 
+            startX + (c ? appRect.left : 0),
+            startY + (c ? appRect.top + 20 : 0)
+        );
 
         setResizeDirection();
 
@@ -65,8 +64,7 @@ function handleCursor(pos) {
     if (currentlyDragged) {
 
         var dx = 0, dy = 0;
-
-        if (!isContainer) {
+        if (isFrame) {
             dx += appRect.left;
             dy += appRect.top + 20;
         }
@@ -107,6 +105,7 @@ function handleCursor(pos) {
 function endCursor(e) {
     
     console.log((isDragging || isResize) ? "Mouse up" : "Mouse out");
+    if (pointerHolder) pointerHolder.releasePointerCapture(e.pointerId);
 
     if (currentlyDragged) currentlyDragged.baseRect = {
         left: removePixels(currentlyDragged.container.style.left),
@@ -168,21 +167,18 @@ function checkResize(e, frameElement) {
 
         left = e.clientX;
         top = e.clientY;
-        elementWidth = window.getComputedStyle(frameElement).width;
-        elementHeight = window.getComputedStyle(frameElement).height;
+        elementWidth = parseFloat(window.getComputedStyle(frameElement).width);
+        elementHeight = parseFloat(window.getComputedStyle(frameElement).height);
 
     } else {
 
         var borders = this.getBoundingClientRect();
         left = e.clientX - borders.left;
         top = e.clientY - borders.top;        
-        var elementWidth = this.style.width;
-        var elementHeight = this.style.height;
+        var elementWidth = parseFloat(this.style.width);
+        var elementHeight = parseFloat(this.style.height);
 
     }
-
-    elementWidth = elementWidth.slice(0, elementWidth.indexOf("p"));
-    elementHeight = elementHeight.slice(0, elementHeight.indexOf("p"));
 
 
     var lewo = left < 5;

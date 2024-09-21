@@ -91,23 +91,35 @@ class AppWindow {
 
     initEvents() {
 
-        this.container.onpointerdown = initCursor.bind(this);
-        this.container.onpointerup = endCursor;
+        this.container.addEventListener("pointerdown", e => {
+        
+            pointerHolder = e.target;
+            pointerHolder.setPointerCapture(e.pointerId);            
+            initCursor.bind(this)(e);
+        })
+
         this.container.onpointermove = e => {
-            isFrame = false;
             checkResize.bind(this.container)(e);
             setCursorStyle.bind(this.container)();
         }
 
-        
-        var frame = this.container.lastChild;
+        this.container.onpointerup = endCursor;
 
-        frame.contentDocument.body.addEventListener("pointermove", e => {
-            isFrame = true;
-            checkResize.bind(this.container)(e, frame);
-            setCursorStyle.bind(this.container)(frame);
+        const frame = this.container.lastElementChild;
+        const frameContent = frame.contentDocument;
+
+        frame.addEventListener("pointerdown", e => {
+            pointerHolder = e.target;
+            pointerHolder.setPointerCapture(e.pointerId);
+            initCursor.bind(this)(e);
         })
 
+        frame.onpointermove = e => {
+            checkResize.bind(this.container)(e);
+            setCursorStyle.bind(this.container)();
+        }
+
+        frame.onpointerup = endCursor;
 
     }
 
